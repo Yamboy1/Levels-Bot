@@ -1,4 +1,5 @@
 import { Events } from "discord.js";
+import { commands } from "../loaders/commands.js";
 
 const ERROR_REPLY = {
   content: "There was an error while executing this command!",
@@ -9,7 +10,7 @@ export const event = Events.InteractionCreate;
 
 export const execute = async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  const command = interaction.client.commands.get(interaction.commandName);
+  const command = commands.get(interaction.commandName);
   if (!command) return;
 
   try {

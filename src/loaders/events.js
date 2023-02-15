@@ -1,10 +1,13 @@
 import * as fs from "node:fs/promises";
+import { eventsUrl } from "../config.js";
 
-export const loadEvents = async (url, client) => {
-  const files = (await fs.readdir(url)).filter((file) => file.endsWith(".js"));
+export const loadEvents = async (client) => {
+  const files = (await fs.readdir(eventsUrl)).filter((file) =>
+    file.endsWith(".js")
+  );
 
   for (const file of files) {
-    const event = await import(new URL(file, url).href);
+    const event = await import(new URL(file, eventsUrl));
     if (!event.event || !event.execute) {
       console.error(`Event ${file} does not export event and execute`);
       continue;

@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
 import { SlashCommandBuilder } from "discord.js";
+import { createDb, dropDb } from "../db.js";
 
 export const data = new SlashCommandBuilder()
   .setName("reset")
@@ -7,9 +8,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
   await interaction.deferReply();
-  await interaction.client.db.exec("DROP TABLE users");
-  await interaction.client.db.exec(
-    await fs.readFile(new URL("../sql/create.sql", import.meta.url), "utf-8")
-  );
-  await interaction.editReply("Dropped database");
+  await dropDb();
+  await createDb();
+  await interaction.editReply("Database reset");
 }

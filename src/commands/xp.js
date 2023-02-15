@@ -1,6 +1,5 @@
-// command to view your xp in the given server using esm
-
 import { SlashCommandBuilder } from "discord.js";
+import { selectStatement } from "../db.js";
 
 export const data = new SlashCommandBuilder()
   .setName("xp")
@@ -14,10 +13,8 @@ export async function execute(interaction) {
   const userId = interaction.options.getUser("user")?.id ?? interaction.user.id;
   const guildId = interaction.guildId;
   if (!guildId) return;
-  const statement = await interaction.client.db.prepare(
-    "SELECT * FROM users WHERE user_id = ? AND guild_id = ?"
-  );
-  const result = await statement.get(userId, guildId);
+
+  const result = selectStatement.get(userId, guildId);
   if (!result) {
     await interaction.editReply("User has no XP");
   } else {
